@@ -1,0 +1,21 @@
+{% javascript %}
+$('#quickpost').on('submit', function(event) {
+
+	event.preventDefault();
+
+	$.ajax({
+		type: $(this).attr('method'),
+		url: $(this).attr('action'),
+		data: $(this).serialize() + '&authenticity_token=' + escape(rails_authenticity_token),
+		beforeSend: function() {
+//			$('#quickpost_submit').attr('disabled', 'disabled');
+			$('#quickpost_submit').val('Posting...');
+		},
+		success: function(msg) {
+			$('#quickpost_submit').val('Post');
+//			$('#quickpost_submit').removeAttr('disabled');
+		}
+	});
+	
+});
+{% endjavascript %}
