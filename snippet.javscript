@@ -8,14 +8,20 @@ $('#quickpost').on('submit', function(event) {
 		url: $(this).attr('action'),
 		data: $(this).serialize() + '&authenticity_token=' + escape(rails_authenticity_token),
 		beforeSend: function() {
-//			$('#quickpost_submit').attr('disabled', 'disabled');
+			$('#quickpost .alert-danger, #quickpost .alert-success').remove();
+			$('#quickpost_submit').attr('disabled', 'disabled');
 			$('#quickpost_submit').val('Posting...');
-		},
-		success: function(msg) {
-			$('#quickpost_submit').val('Post');
-//			$('#quickpost_submit').removeAttr('disabled');
 		}
-	});
-	
+	}).done(function(msg) {
+		$('#quickpost_submit').val('Post');
+		$('#quickpost_submit').removeAttr('disabled');
+		$('#quickpost').prepend('<div class="alert alert-success">Successfully created a post!</div>');
+	}).fail(function(msg) {
+		$('#quickpost').prepend('<div class="alert alert-danger">' + msg.responseJSON.message + '</div>');
+		$('#quickpost_submit').removeAttr('disabled');
+	});	
 });
 {% endjavascript %}
+
+
+
